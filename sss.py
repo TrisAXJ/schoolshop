@@ -11,6 +11,7 @@ import datetime
 import requests
 import time
 from jsonpath import jsonpath
+from past.builtins import raw_input
 from win10toast_click import ToastNotifier
 
 
@@ -36,7 +37,11 @@ def date():
     }
 
     response = requests.post('https://yun.yun8609.net//wxmall/wmall/getCateInfoList', headers=headers, data=data)
-    return response
+    if response.status_code == 200:
+        return response
+    else:
+        print("Error request:"+ str(response.status_code))
+        raw_input ("Press <enter>")
 
 
 def solve_date():
@@ -44,14 +49,15 @@ def solve_date():
     count = jsonpath(res, "$..count")
     th_name = jsonpath(res, "$..name")
     th_num = jsonpath(res, "$..stockqty")
+    th_price = jsonpath(res, "$..mallmprice")
     all = []
 
     for i in range(0, count[0]):
         if th_num[i] <= 0:
             th_num[i] = 0
-            all.append([th_name[i], th_num[i]])
+            all.append([th_name[i], th_num[i], th_price[i]])
         else:
-            all.append([th_name[i], th_num[i]])
+            all.append([th_name[i], th_num[i], th_price[i]])
 
     return all, count
 
@@ -69,13 +75,13 @@ def msgbox():
         else:
             msg[i].append("✅")
 
-        msgg = msgg + msg[i][0] + ",剩余" + str(msg[i][1]) + msg[i][2] + "\n"
+        msgg = msgg + msg[i][0] + str(msg[i][2]) + "元,剩余" + str(msg[i][1]) + msg[i][3] + "\n"
 
     total = str(datetime.datetime.now()) + "\n" + msgg
     print(total)
 
     toaster = ToastNotifier()
-    toaster.show_toast(title="", msg= total , icon_path=None, duration=5, threaded=True)
+    toaster.show_toast(title="", msg= total , icon_path=None, duration=10, threaded=True)
 
 
 

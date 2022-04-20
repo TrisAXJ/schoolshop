@@ -81,7 +81,9 @@ def msgbox():
     print(total)
 
     toaster = ToastNotifier()
-    toaster.show_toast(title="", msg= total , icon_path=None, duration=10, threaded=True)
+    toaster.show_toast(title="", msg= total, icon_path="default", duration=5, threaded=True)
+    time.sleep(0.5)
+    print("持续监控中...")
 
 
 
@@ -94,8 +96,6 @@ if __name__ == '__main__':
     while True:
         all, num = solve_date()
         #msgbox()
-        #time.sleep(5)
-        #'''
         for i in range(0,num[0]):
             if his_all[i][0] != all[i][0] : # 若商品列表变化
                 msgbox()

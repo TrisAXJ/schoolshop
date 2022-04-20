@@ -73,9 +73,9 @@ def msgbox():
         if msg[i][1] == 0 :
             msg[i].append("❌已售罄")
         else:
-            msg[i].append("✅")
+            msg[i].append("✅在售中")
 
-        msgg = msgg + msg[i][0] + str(msg[i][2]) + "元,剩余" + str(msg[i][1]) + msg[i][3] + "\n"
+        msgg = msgg + msg[i][0] + str(msg[i][2]) + "元,剩余" +" [" + str(msg[i][1]) + "]  "+ msg[i][3] + "\n"
 
     total = str(datetime.datetime.now()) + "\n" + msgg
     print(total)
@@ -92,8 +92,10 @@ if __name__ == '__main__':
     his_all = solve_date()[0]
     print("监控中...")
     while True:
-
         all, num = solve_date()
+        #msgbox()
+        #time.sleep(5)
+        #'''
         for i in range(0,num[0]):
             if his_all[i][0] != all[i][0] : # 若商品列表变化
                 msgbox()
@@ -104,6 +106,6 @@ if __name__ == '__main__':
                 his_all = all
                 time.sleep(3)
         time.sleep(3)
-
+#'''
 
 

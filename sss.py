@@ -7,7 +7,7 @@
 # Email:1628791325@QQ.com
 # -U2hhcmUlMjBhbmQlMjBMb3Zl-base64
 
-
+import datetime
 import requests
 import time
 from jsonpath import jsonpath
@@ -65,17 +65,17 @@ def msgbox():
     msgg = ""
     for i in range(0, num[0]):
         if msg[i][1] == 0 :
-            msg[i].append("(┭┮﹏┭┮)")
+            msg[i].append("❌已售罄")
         else:
-            msg[i].append("(√＜（＾－＾）＞√)")
+            msg[i].append("✅")
 
         msgg = msgg + msg[i][0] + ",剩余" + str(msg[i][1]) + msg[i][2] + "\n"
 
-
-    print(msgg)
+    total = str(datetime.datetime.now()) + "\n" + msgg
+    print(total)
 
     toaster = ToastNotifier()
-    toaster.show_toast(title="", msg= msgg , icon_path=None, duration=5, threaded=True)
+    toaster.show_toast(title="", msg= total , icon_path=None, duration=5, threaded=True)
 
 
 
@@ -84,8 +84,9 @@ if __name__ == '__main__':
     #msgbox()
 
     his_all = solve_date()[0]
+    print("监控中...")
     while True:
-        print("监控中...")
+
         all, num = solve_date()
         for i in range(0,num[0]):
             if his_all[i][0] != all[i][0] : # 若商品列表变化

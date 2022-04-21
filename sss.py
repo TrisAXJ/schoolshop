@@ -38,19 +38,25 @@ def date():
 
     trys = 0
     while trys <= 3:
+        # POST请求
         Response = requests.post('https://yun.yun8609.net//wxmall/wmall/getCateInfoList', headers=headers, data=data)
-        if Response.status_code == 200:
+        if Response.status_code == 200:  # 成功
             trys = 0
+            print(">>"+ str(datetime.datetime.now())+",请求成功！<<")
             return Response
-        else:
-            print("Error request:" + str(Response.status_code))
+        else:  # 失败重试3次
+            print(">>"+ str(datetime.datetime.now())+"<<"+"\n>>Error request:" + str(Response.status_code)+"<<")
             trys = trys + 1
-            print("Retry after 5s later...")
-            time.sleep(5)
-            print("请求接口...第%s次" % trys)
             if trys == 4:
-                print("请求错误，请重启程序！")
-                raw_input("Press <enter>")
+                time.sleep(0.5)
+                break
+            time.sleep(1)
+            print(">>Retry after 60s later...")
+            time.sleep(60)
+            print(">>>>重新请求接口...第%s次<<<<" % trys)
+            time.sleep(0.5)
+    print(">>>>请求错误，请重启程序！<<<<")
+    raw_input("Press <enter>")  # 防止直接关闭窗口
 
     # respose = Response
     # return respose
@@ -65,7 +71,8 @@ def solve_date():
     all = []
     log_solve = 1
 
-    if count:
+    # 响应中 count代表列表中商品数量 若商品列表无数据 count为0
+    if count != [0]:
         for i in range(0, count[0]):
             if th_num[i] <= 0:
                 th_num[i] = 0
@@ -82,7 +89,7 @@ def msgbox():
     all, num, log_solve = solve_date()
     msg = all
     msgg = ""
-    if log_solve == 1:
+    if log_solve == 1:  # 如果商品列表有数据
         for i in range(0, num[0]):
             if msg[i][1] == 0:
                 msg[i].append("❌已售罄")
@@ -94,8 +101,9 @@ def msgbox():
         msgg = "商店商品列表为空"
 
     total = str(datetime.datetime.now()) + "\n" + msgg
-    print(total)
+    print(total)  # 程序窗口中输出
 
+    # 桌面通知 已知Bug: py程序封装成exe程序后，show_toast中icon无法调用报错 不影响程序运行
     toaster = ToastNotifier()
     toaster.show_toast(title="", msg=total, icon_path="default", duration=5, threaded=True)
     time.sleep(0.5)
@@ -103,13 +111,13 @@ def msgbox():
 
 
 def main():
-    his_all, his_num, his_no = solve_date()
-    print("接口监控中...")
+    his_all, his_num, his_no = solve_date()  # 先发次请求记录商品列表信息，用作后续判断触发消息通知条件
+    print(">>>>正在监控商品列表.......")
     time.sleep(3)
-    while True:
-        all, num, log_solve = solve_date()
+    while True:  # 本demo使用死循环不太建议正规项目使用 建议使用schedule Task
+        all, num, log_solve = solve_date()  # 获取信息 all为处理过的列表[['商品名','库存','价格','状态'],[],...];num为商品列表中商品数量;
         # msgbox()
-        if his_all and all:  # 判断历史商品列表与新商品列表是否都有数据
+        if len(his_all) != 0 and len(all) != 0:  # 旧商品列表与新商品列表都有数据
             for i in range(0, num[0]):
                 if his_num == num:
                     if his_all[i][0] != all[i][0]:  # 若商品列表变化触发消息
@@ -124,19 +132,20 @@ def main():
                     msgbox()
                     his_all = all
                     time.sleep(5)
-        elif all == False and his_all: # 新列表为空 触发消息
+        elif len(his_all) == 0 and len(all) != 0: #旧列表为空 新列表有数据 触发消息
+            print(">>>>商店已开门！")
+            time.sleep(5)
+        elif len(all) == 0 and len(his_all) != 0:  # 新商品列表为空 触发消息
             msgbox()
             his_all = all
             time.sleep(5)
-        elif his_all == False and all:
-            print(">>>>商店已开门！")
-            msgbox()
-            time.sleep(5)
-        elif his_all ==False and all == False:
+        elif len(his_all) == 0 and len(all) == 0: # 新旧商品列表均为空
+            time.sleep(10)
             continue
+
 
 
 if __name__ == '__main__':
     # solve_date()
     # msgbox()
-    main()
+    main()  # 入口

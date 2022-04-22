@@ -96,7 +96,7 @@ def msgbox():
             else:
                 msg[i].append("✅在售中")
 
-            msgg = msgg + ">>" + msg[i][0] + str(msg[i][2]) + "元\n剩余" + " [" + str(msg[i][1]) + "]  " + msg[i][3] + "\n"
+            msgg = msgg + ">>" + msg[i][0] + str(msg[i][2]) + "元，剩余" + " [" + str(msg[i][1]) + "]  " + msg[i][3] + "\n"
     else:
         msgg = "商店商品已全部下架"
 

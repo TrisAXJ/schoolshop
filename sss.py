@@ -65,7 +65,11 @@ def date():
 def solve_date():
     res = date().json()
     th_name = jsonpath(res, "$..name")
-    count = len(th_name)
+    if not th_name:
+        count = 0
+    else:
+        count = len(th_name)
+
     th_num = jsonpath(res, "$..stockqty")
     th_price = jsonpath(res, "$..mallmprice")
     all = []

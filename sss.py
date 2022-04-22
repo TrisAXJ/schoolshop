@@ -21,13 +21,13 @@ def date():
         'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/53.0.2785.143 Safari/537.36 MicroMessenger/7.0.9.501 NetType/WIFI MiniProgramEnv/Windows WindowsWechat',
         'Content-Type': 'application/json',
     }
-
+     # 注意 data中pageSize值的改变可以改变获取的商品种数
     data = {
         'typeid': '',
         'start': '0',
         'prefetype': 'undefined',
         'discount': 'undefined',
-        'pageSize': '10',
+        'pageSize': '50',
         'sorttype': '',
         'sortcol': '',
         'sid': '49480',
@@ -96,7 +96,7 @@ def msgbox():
             else:
                 msg[i].append("✅在售中")
 
-            msgg = msgg + ">>" + msg[i][0] + str(msg[i][2]) + "元，剩余" + " [" + str(msg[i][1]) + "]  " + msg[i][3] + "\n"
+            msgg = msgg + ">>" + msg[i][0] + "，" + str(msg[i][2]) + "元，剩余" + " [" + str(msg[i][1]) + "]  " + msg[i][3] + "\n"
     else:
         msgg = "商店商品已全部下架"
 

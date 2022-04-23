@@ -145,7 +145,9 @@ def main():
                     elif int(his_all[i][1]) - int(all[i][1]) > 0 and all[i][1] == 0:  # 库存为0 触发消息
                         key = key + 1
                         # his_all = all
-                    else:  # 商品列表未发生变化
+                    elif his_all[i][1] == 0 and int(all[i][1]) - int(his_all[i][1]) > 0 :  # 补货触发
+                        key = key + 1
+                    else:
                         key = 0
 
                 if key != 0:

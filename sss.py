@@ -290,10 +290,10 @@ def msgbox(msgg, task, tozero):
 
 # pushplus 推送
 def sendmessage(total):
-    token = '6c08b8c50b494ae9a3c2125fd0be3656'  # 需要更改你的token
+    token = ''  # 需要更改你的token
     title = '商品变更通知'  # 改成你要的标题内容
     content = total  # 改成你要的正文内容
-    topic = '538'  # 群组编码，可以进行群发，需更改url
+    topic = ''  # 群组编码，可以进行群发，需更改url
     url = 'http://www.pushplus.plus/send?token=' + token + '&title=' + title + '&content=' + content + '&topic=' + topic
     requests.get(url)
     time.sleep(0.5)
